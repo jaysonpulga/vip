@@ -1,0 +1,23 @@
+language: php
+sudo: false
+env:
+  global:
+    - secure: >-
+        h4K+jmSu8/qlyRX17vhZb3HsHfNyYKWvRCa6iYQ8OlBdKWhQBqcqDExd/wcC4uoHoUeehxVMAgIcxGtn3GlFwm2xNAeNxL9XKyLoIq6Oa27drzmXrfHhq/NsKLZN0+0S9ZT/O2oc6AxQNyduWBbwPHnKVZZF8kiFdAbPd/dH52UTwOHmNwlnjWSFT0BIikmc5vJAuxBJlSDb3k9YIRrVg8mxueSofp/ktAxRppg929TDhd5z64bi+C7EqMQXrIpkTVy8+E3vn1CZqPedAz6GjJdx7GRdQruQTuJteDlOACivZ7SP2YCwLBumyJQT/PjK+ZS6UJYXTeJNd7s0WXRcD/wDONGcjNTJKisjoLZ7hjCSCSsX/R5RKJiAPkWbDcRbj9Q7RdctL2nuh7Qwz1xTyMc8cGkhgmYLjoQ+w/Lr/pxNBdpQflLo7WU8jgBhBf590p3aTvvo8FnNUY/PK6OrhYx+5JJEXhMkZWnpRbfb3UCPBq8MRLHVh8l2SNiYRi+4dS8kB+1oYu9VTAbYI44RrZIrX8uQiV5vJxLrNwZaf0pXCGfUmyQPRh/tjNGLzqsi7nF5MtfqfMEPf6Rx8gU+8o1tybVkx4q5SOSj7oEkDG5O3iJWrWEQkN1e5VNsotYrHYp7OU6EBikXTIrxot6ADZjVWaw2oI7D4hW/ik4XnOg=
+php:
+  - 5.6
+  - 7
+  - 7.1
+install:
+  - travis_retry composer install --prefer-dist
+script:
+  - vendor/bin/phpunit
+after_script:
+  - travis_retry php vendor/bin/coveralls -v
+after_success:
+  - >-
+    test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "master" &&
+    test $TRAVIS_PHP_VERSION = "7" && bash ./scripts/api.sh
+cache:
+  directories:
+    - $HOME/.composer/cache
